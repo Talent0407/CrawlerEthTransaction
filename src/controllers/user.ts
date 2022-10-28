@@ -62,11 +62,13 @@ export const postLogin = async (
         if (err) {
           return next(err);
         }
-        const token = jwt.sign({ email: user.email, password: user.password }, SESSION_SECRET)
+        const token = jwt.sign(
+          { email: user.email, password: user.password },
+          SESSION_SECRET
+        );
         req.flash("success", { msg: "Success! You are logged in." });
         // res.redirect(req.session.returnTo || "/");
-        res.status(200).send({ token: token })
-
+        res.status(200).send({ token: token });
       });
     }
   )(req, res, next);
@@ -76,13 +78,20 @@ export const postLogin = async (
  * Log out.
  * @route GET /logout
  */
-export const logout = async(
+export const logout = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  await req.logout();
-  res.redirect("/");
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.send("Succeeded to Logout");
+  });
+  // For Test using Jest should use below codebase
+  // await req.logout();
+  // res.redirect("/");
 };
 
 /**
@@ -120,7 +129,7 @@ export const postSignup = async (
 
   if (!errors.isEmpty()) {
     req.flash("errors", errors.array());
-    console.log("Justin Error: ", errors)
+    console.log("Justin Error: ", errors);
     return res.redirect("/signup");
   }
 
