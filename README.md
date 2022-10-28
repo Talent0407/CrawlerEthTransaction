@@ -16,7 +16,7 @@ The main purpose of this repository is to show a working crawling of ethereum tr
 - You can use any third-party library to accomplish the tasks, but please briefly describe why you choose the library in README
  I implemented to crawl info from chain using Moralis API because if I get them directly from chain, the response takes too long.
  For sure, I can implement the logic to get them directly from chain and it's too easy.
-###
+### APIs
 - Signup API
 http://localhost:3000/signup
 https://github.com/JustinW424/CrawlerEthTransaction/blob/e81fac613b4400b2b1e9693184db5faf6ab5e1a0/app_screen/Screenshot%202022-10-28%20092755.png
@@ -31,6 +31,12 @@ http://localhost:3000/crawlerERC20
 https://github.com/JustinW424/CrawlerEthTransaction/blob/e81fac613b4400b2b1e9693184db5faf6ab5e1a0/app_screen/Untitled.png
 - Logout API
 http://localhost:3000/logout
+
+### Nice to Have
+- Used MongoDB
+- NodeJS Express Typescript
+- Unit Test with Jest
+- E2E Testing with postman
 
 # Table of contents:
 
