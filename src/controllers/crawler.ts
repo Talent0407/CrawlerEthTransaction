@@ -110,12 +110,12 @@ const crawlTransactionwithMoralis = async () => {
 };
 
 const crawlTransactionERC20withMoralis = async () => {
+  const axios = require("axios");
   const config = {
     method: "get",
     url: `https://deep-index.moralis.io/api/v2/${address}/erc20/transfers?chain=eth`,
     headers: { "X-API-Key": process.env.MORALIS_API_KEY },
   };
-  const axios = require("axios");
   let res = await axios(config);
   let tempArr: any[] = [];
   console.log(res.data.result, "Justin Test ERC20 Transaction");
