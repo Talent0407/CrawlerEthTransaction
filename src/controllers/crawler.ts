@@ -7,7 +7,6 @@ import { NativeError } from "mongoose";
 import { UserDocument } from "../models/User";
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/evm-utils";
-// import axios from "axios";
 
 /**
  * Crawler.
@@ -27,7 +26,6 @@ export const crawler = async (req: Request, res: Response) => {
     SESSION_SECRET,
     (err: any, decoded: jwt.JwtPayload) => {
       if (err) {
-        console.log("Justin Test Result Error:", err);
         res.status(200).send("Verify Token Failed!");
         return;
       }
@@ -44,7 +42,6 @@ export const crawler = async (req: Request, res: Response) => {
       }
       if (existingUser) {
         address = existingUser.address;
-        console.log("Wallet address of User: ", address);
       }
     }
   );
@@ -54,7 +51,6 @@ export const crawler = async (req: Request, res: Response) => {
 
 export const crawlerERC20 = async (req: Request, res: Response) => {
   var verified_email;
-  console.log("ssssssssssssss");
   // Verify User with JWT
   jwt.verify(
     req.headers.authorization?.replace("Bearer ", ""),
@@ -78,7 +74,6 @@ export const crawlerERC20 = async (req: Request, res: Response) => {
       }
       if (existingUser) {
         address = existingUser.address;
-        console.log("Wallet address of User: ", address);
       }
     }
   );
@@ -90,26 +85,28 @@ const crawlTransactionwithMoralis = async () => {
   await Moralis.start({
     apiKey: process.env.MORALIS_API_KEY,
   });
-  const response = await Moralis.EvmApi.transaction.getWalletTransactions({
-    address,
-    chain,
-  });
-
-  let tempArr: any[] = [];
-  if (response != null && response.result != null) {
-    for (let txHash of response.result) {
-      tempArr = [
-        ...tempArr,
-        {
-          hash: txHash.hash,
-          from: txHash.from["_value"].toLowerCase(),
-          to: txHash.to["_value"].toLowerCase(),
-          value: txHash.value["rawValue"],
-        },
-      ];
-    }
-    result = tempArr;
-  }
+  Moralis.EvmApi.transaction
+    .getWalletTransactions({
+      address,
+      chain,
+    })
+    .then((res) => {
+      let tempArr: any[] = [];
+      if (res != null && res.result != null) {
+        for (let txHash of res.result) {
+          tempArr = [
+            ...tempArr,
+            {
+              hash: txHash.hash,
+              from: txHash.from["_value"].toLowerCase(),
+              to: txHash.to["_value"].toLowerCase(),
+              value: txHash.value["rawValue"],
+            },
+          ];
+        }
+        result = tempArr;
+      }
+    });
 };
 
 const crawlTransactionERC20withMoralis = async () => {
@@ -118,8 +115,7 @@ const crawlTransactionERC20withMoralis = async () => {
     url: `https://deep-index.moralis.io/api/v2/${address}/erc20/transfers?chain=eth`,
     headers: { "X-API-Key": process.env.MORALIS_API_KEY },
   };
-
-  const axios = require('axios');
+  const axios = require("axios");
   let res = await axios(config);
   let tempArr: any[] = [];
   console.log(res.data.result, "Justin Test ERC20 Transaction");

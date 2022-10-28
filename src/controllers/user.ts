@@ -62,7 +62,6 @@ export const postLogin = async (
         if (err) {
           return next(err);
         }
-        console.log(user, "Justin Test Juser sign")
         const token = jwt.sign({ email: user.email, password: user.password }, SESSION_SECRET)
         req.flash("success", { msg: "Success! You are logged in." });
         // res.redirect(req.session.returnTo || "/");
